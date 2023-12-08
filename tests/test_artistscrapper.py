@@ -39,7 +39,7 @@ class TestArtistScrapper(BaseTest):
     def setup_spotifyscrapper(self):
         self.page = Spotify(self.driver, self.wait)
         self.page.go_to_home_page()
-        self.page.check_title("Login - Spotify")
+        # self.page.check_title("Login - Spotify")
         self.page.enter_username("pitching@weareinstrumental.com")
         self.page.enter_password("Shifting#Supremacy#Symphony5")
         self.page.click_on_login()

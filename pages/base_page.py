@@ -59,8 +59,9 @@ class BasePage:
         except Exception as e:
             print(f"Failed to enter text into the text box. {str(e)}")
 
-    def scroll_to_element(self, element):
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+    def scroll_to_element(driver, element):
+        # Scroll until the element is in view
+        driver.execute_script("arguments[0].scrollIntoView(true);", element)
 
     def read_excel(self):
         artist_names = self.df['artistName']

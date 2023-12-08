@@ -14,7 +14,7 @@ class Spotify(BasePage):
 
     def check_title(self, title):
         self.wait.until(EC.title_contains(title))
-
+        
     def enter_username(self, username):
         self.enter_text_by_locator(self.locator.emailUsername, username)
 
