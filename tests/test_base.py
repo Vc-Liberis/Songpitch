@@ -4,13 +4,16 @@ from pathlib import Path
 
 import pytest
 import yaml
-
+from seleniumwire import webdriver
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.service import Service as ServiceChrome
 from selenium.webdriver.firefox.service import Service as ServiceFirefox
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
+import warnings
+from seleniumwire import webdriver
+import pytest
 
 os.environ['WDM_LOG_LEVEL'] = '0'
 
@@ -31,13 +34,10 @@ class BaseTest:
     def init_driver(self):
         warnings.simplefilter("ignore", ResourceWarning)
         if config()['browser'] == 'chrome':
-            options = webdriver.ChromeOptions()
-            if config()['headless']:
-                options.add_argument('--headless')
-                options.add_argument('--no-sandbox')
-                options.add_argument('--disable-gpu')
-                options.add_argument('--window-size=1920,1080')
-            self.driver = webdriver.Chrome(service=ServiceChrome(ChromeDriverManager().install()), options=options)
+            options = {
+            }
+            # Use the 'options' argument instead of 'chrome_options'
+            self.driver = webdriver.Chrome( seleniumwire_options=options)
         elif config()['browser'] == 'firefox':
             options = webdriver.FirefoxOptions()
             if config()['headless']:
@@ -46,11 +46,19 @@ class BaseTest:
                 options.add_argument('--disable-gpu')
                 options.add_argument('--window-size=1920,1080')
             self.driver = webdriver.Firefox(service=ServiceFirefox(GeckoDriverManager().install()), options=options)
+        elif config()['browser'] == 'headless':
+            options = webdriver.ChromeOptions()
+            if config()['headless']:
+                options.add_argument('--headless')
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-gpu')
+                options.add_argument('--window-size=1920,1080')
+            self.driver = webdriver.Chrome(service=ServiceChrome(ChromeDriverManager().install()), options=options)
         else:
             raise Exception("Incorrect Browser")
 
         self.driver.maximize_window()
-        self.wait = WebDriverWait(self.driver, 10)
+        self.wait = WebDriverWait(self.driver, 30)
         yield self.wait, self.driver
 
         if self.driver is not None:

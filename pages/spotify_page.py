@@ -14,12 +14,12 @@ class Spotify(BasePage):
 
     def check_title(self, title):
         self.wait.until(EC.title_contains(title))
+        
+    def enter_username(self, username):
+        self.enter_text_by_locator(self.locator.emailUsername, username)
 
-    def enter_username(self,username):
-        self.enter_text_by_locator(self.locator.emailUsername,username)
-
-    def enter_password(self,password):
-        self.enter_text_by_locator(self.locator.password,password)
+    def enter_password(self, password):
+        self.enter_text_by_locator(self.locator.password, password)
 
     def click_on_login(self):
         self.click_button(*self.locator.loginBtn)
@@ -39,6 +39,7 @@ class Spotify(BasePage):
 
     def select_hometown_for_artist(self):
         self.click_button(*self.locator.hometownForArtists)
-        self.enter_text_by_locator(self, self.locator.hometownForArtists, "London, England, United Kingdom")
+        self.enter_text_by_locator(self.locator.hometownForArtists, "London, England, United Kingdom")
 
-
+    def wait_for_dashboard(self):
+        self.wait_for_presence_element(self.locator.ROASTER_ARTIST_TABLE)
