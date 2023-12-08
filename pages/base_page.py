@@ -1,5 +1,7 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+
 class BasePage:
 
     def __init__(self, driver, wait):
@@ -12,7 +14,7 @@ class BasePage:
     def get_title(self):
         return self.driver.title
 
-    def click_element(self,element, timeout=10):
+    def click_element(self, element, timeout=10):
         """
         Clicks the given WebElement.
 
@@ -29,7 +31,7 @@ class BasePage:
         except Exception as e:
             print(f"Failed to click on the element. {str(e)}")
 
-    def click_element(self,driver, by, value, timeout=10):
+    def click_element_by_value(self, driver, by, value, timeout=10):
         """
         Clicks an element identified by the given locator strategy (by) and value.
 
@@ -48,7 +50,7 @@ class BasePage:
         except Exception as e:
             print(f"Failed to click on the element. {str(e)}")
 
-    def input_text(self,driver, by, value, text, timeout=10):
+    def input_text(self, driver, by, value, text, timeout=10):
         """
         Enters the given text into a text box identified by the given locator strategy (by) and value.
 
@@ -68,6 +70,3 @@ class BasePage:
             print(f"Entered '{text}' into the text box successfully.")
         except Exception as e:
             print(f"Failed to enter text into the text box. {str(e)}")
-
-
-
