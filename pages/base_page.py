@@ -50,7 +50,7 @@ class BasePage:
         except Exception as e:
             print(f"Failed to click on the element. {str(e)}")
 
-    def input_text(self, driver, by, value, text, timeout=10):
+    def input_text_by_by(self, driver, by, value, text, timeout=10):
         """
         Enters the given text into a text box identified by the given locator strategy (by) and value.
 
@@ -70,3 +70,26 @@ class BasePage:
             print(f"Entered '{text}' into the text box successfully.")
         except Exception as e:
             print(f"Failed to enter text into the text box. {str(e)}")
+
+    def enter_text_by_locator(self, locator, text):
+        """
+        Enters the given text into a text box identified by the provided locator.
+
+        Parameters:
+        - driver: WebDriver instance
+        - locator: Tuple (By, value) representing the locator strategy and value (e.g., (By.ID, "your_element_id"))
+        - text: The text to be entered into the text box
+        """
+        try:
+            element = self.wait.until(
+                EC.presence_of_element_located(locator)
+            )
+            element.clear()  # Clear any existing text in the text box
+            element.send_keys(text)
+            print(f"Entered '{text}' into the text box successfully.")
+        except Exception as e:
+            print(f"Failed to enter text into the text box. {str(e)}")
+
+    def scroll_to_element(driver, element):
+        # Scroll until the element is in view
+        driver.execute_script("arguments[0].scrollIntoView(true);", element)

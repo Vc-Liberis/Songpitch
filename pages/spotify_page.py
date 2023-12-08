@@ -5,7 +5,7 @@ from data.spotify import SpotifyHomePageLocators
 
 class Spotify(BasePage):
     def __init__(self, driver, wait):
-        self.url = "https://artists.spotify.com/"
+        self.url = "https://artists.spotify.com/c/roster?offset=0"
         self.locator = SpotifyHomePageLocators
         super().__init__(driver, wait)
 
@@ -14,6 +14,14 @@ class Spotify(BasePage):
 
     def check_title(self, title):
         self.wait.until(EC.title_contains(title))
+
+    def enter_username(self,username):
+        #self.scroll_to_element(self.locator.EMAIL_USERNAME)
+        self.enter_text_by_locator(self.locator.EMAIL_USERNAME,username)
+
+    def enter_password(self,password):
+        #self.scroll_to_element(self.locator.PASSWORD)
+        self.enter_text_by_locator(self.locator.PASSWORD,password)
 
     def click_on_login(self):
         self.click_Login_button(*self.locator.LOGIN)
