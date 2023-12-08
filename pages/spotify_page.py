@@ -29,3 +29,7 @@ class Spotify(BasePage):
     def click_Login_button(self, by, value):
         element = self.wait.until(EC.element_to_be_clickable((by, value)))
         element.click()
+
+    def wait_for_dashboard(self):
+        self.wait_for_presence_element(self.locator.ROASTER_ARTIST_TABLE)
+

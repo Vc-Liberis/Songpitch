@@ -93,3 +93,62 @@ class BasePage:
     def scroll_to_element(driver, element):
         # Scroll until the element is in view
         driver.execute_script("arguments[0].scrollIntoView(true);", element)
+
+    def wait_for_presence_element(self, locator, timeout=30):
+        """
+        Wait for the element identified by the given locator to be present and visible.
+
+        Parameters:
+        - driver: WebDriver instance
+        - locator: Tuple (By, value) representing the locator strategy and value
+        - timeout: Maximum time to wait for the element (default is 10 seconds)
+
+        Returns:
+        - WebElement once it's present and visible
+        """
+        try:
+            element = self.wait.until(
+                EC.presence_of_element_located(locator)
+            )
+            return element
+        except Exception as e:
+            raise TimeoutError(f"Element {locator} not found within {timeout} seconds.") from e
+    def wait_for_visiblity_element(self, locator, timeout=30):
+        """
+        Wait for the element identified by the given locator to be present and visible.
+
+        Parameters:
+        - driver: WebDriver instance
+        - locator: Tuple (By, value) representing the locator strategy and value
+        - timeout: Maximum time to wait for the element (default is 10 seconds)
+
+        Returns:
+        - WebElement once it's present and visible
+        """
+        try:
+            element = self.wait.until(
+                EC.visibility_of_element_located(locator)
+            )
+            return element
+        except Exception as e:
+            raise TimeoutError(f"Element {locator} not found within {timeout} seconds.") from e
+
+    def wait_for_element(self, locator, timeout=30):
+        """
+        Wait for the element identified by the given locator to be present and visible.
+
+        Parameters:
+        - driver: WebDriver instance
+        - locator: Tuple (By, value) representing the locator strategy and value
+        - timeout: Maximum time to wait for the element (default is 10 seconds)
+
+        Returns:
+        - WebElement once it's present and visible
+        """
+        try:
+            element = self.wait.until(
+                EC.presence_of_element_located(locator) and EC.visibility_of_element_located(locator)
+            )
+            return element
+        except Exception as e:
+            raise TimeoutError(f"Element {locator} not found within {timeout} seconds.") from e
