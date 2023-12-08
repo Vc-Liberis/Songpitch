@@ -1,6 +1,6 @@
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
-from data.SpotifyLocators import SpotifyHomePageLocators
+from data.spotify import SpotifyHomePageLocators
 
 
 class Spotify(BasePage):

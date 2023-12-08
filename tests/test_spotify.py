@@ -3,8 +3,8 @@ import pytest
 from selenium.webdriver.common.by import By
 
 from pages.spotify_page import Spotify
-from tests.base_test import BaseTest
-from data.SpotifyLocators import SpotifyHomePageLocators
+from tests.test_base import BaseTest
+from data.spotify import SpotifyHomePageLocators
 
 
 class TestSpotify(BaseTest):
