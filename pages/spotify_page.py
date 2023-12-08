@@ -16,16 +16,29 @@ class Spotify(BasePage):
         self.wait.until(EC.title_contains(title))
 
     def enter_username(self,username):
-        #self.scroll_to_element(self.locator.EMAIL_USERNAME)
-        self.enter_text_by_locator(self.locator.EMAIL_USERNAME,username)
+        self.enter_text_by_locator(self.locator.emailUsername,username)
 
     def enter_password(self,password):
-        #self.scroll_to_element(self.locator.PASSWORD)
-        self.enter_text_by_locator(self.locator.PASSWORD,password)
+        self.enter_text_by_locator(self.locator.password,password)
 
     def click_on_login(self):
-        self.click_Login_button(*self.locator.LOGIN)
+        self.click_button(*self.locator.loginBtn)
 
-    def click_Login_button(self, by, value):
+    def click_button(self, by, value):
         element = self.wait.until(EC.element_to_be_clickable((by, value)))
         element.click()
+
+    def input_artist_name(self, value):
+        self.enter_text_by_locator(self.locator.searchByArtist, value)
+
+    def click_on_pitchsong_btn(self):
+        self.click_button(*self.locator.pitchASongLinkBtn)
+
+    def click_on_next_btn(self):
+        self.click_button(*self.locator.nextBtn)
+
+    def select_hometown_for_artist(self):
+        self.click_button(*self.locator.hometownForArtists)
+        self.enter_text_by_locator(self, self.locator.hometownForArtists, "London, England, United Kingdom")
+
+

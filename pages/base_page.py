@@ -1,8 +1,11 @@
+import pandas as pd
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
 class BasePage:
+    excel_file_path = "C:\\Users\\SurajDengale\\IdeaProjects\\vinayLatest\\Songpitch\\testData\\SignUpTestData.xlsx"
+    df = pd.read_excel(excel_file_path, sheet_name="Sheet1")
 
     def __init__(self, driver, wait):
         self.driver = driver
@@ -93,3 +96,13 @@ class BasePage:
     def scroll_to_element(driver, element):
         # Scroll until the element is in view
         driver.execute_script("arguments[0].scrollIntoView(true);", element)
+
+    def read_excel(self):
+        # print(f"Column:: {df.columns.ravel()}" )
+        # Fetch the 'artistName' column
+        artist_names = self.df['artistName']
+        print(f"Name:::  {artist_names.values}")
+
+    def get_artist_name(self):
+        artist_names_list = self.df['artistName'].tolist()
+        print(f"Name:::  {artist_names_list[0]}")
