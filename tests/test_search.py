@@ -1,7 +1,7 @@
 # coding=utf-8
 import pytest
 from pages.search_page import SearchPage
-from tests.base_test import BaseTest
+from tests.test_base import BaseTest
 
 
 class TestSearch(BaseTest):
