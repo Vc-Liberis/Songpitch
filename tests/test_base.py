@@ -11,6 +11,7 @@ import warnings
 import pytest
 import subprocess
 import platform
+from seleniumwire import webdriver
 
 os.environ['WDM_LOG_LEVEL'] = '1'
 os.environ["WDM_LOCAL"] = "1"
@@ -86,8 +87,7 @@ class BaseTest:
             print(f"Google Chrome Binary Directory: {chrome_directory}")
         print(os.path.join(os.getcwd(), 'driver', 'chromedriver'))
         warnings.simplefilter("ignore", ResourceWarning)
-        # Set a valid timeout for the "connect" attribute
-        timeout = 10.0  # Adjust the value as needed
+        # Set a valid timeout for the "connect" attribut
 
         if config()['browser'] == 'chrome':
             self.driver = webdriver.Chrome()  # Set implicit wait time
@@ -117,7 +117,7 @@ class BaseTest:
             raise Exception("Incorrect Browser")
 
         self.driver.maximize_window()
-        self.wait = WebDriverWait(self.driver, timeout)
+        self.wait = WebDriverWait(self.driver, 30)
         yield self.wait, self.driver
 
         if self.driver is not None:
