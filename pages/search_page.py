@@ -1,6 +1,6 @@
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
-from data.locators import SearchPageLocators
+from locators.locators import SearchPageLocators
 
 
 class SearchPage(BasePage):

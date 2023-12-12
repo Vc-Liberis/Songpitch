@@ -1,0 +1,35 @@
+from selenium.webdriver.common.by import By
+
+
+class AppleLocators:
+    PASSWORD = By.XPATH("//input[@type='Password']")
+    NEXTBUTTON = By.CSS_SELECTOR("input#NextButton")
+    SUBMITBUTTON = By.CSS_SELECTOR("input#NextButton")
+    HEADERTEXT = By.XPATH("//div[contains(text(),'Keep our editorial teams up to date with your rele')]")
+    NAME_INPUT = By.XPATH("//label[normalize-space()='Your name']/../..//input")
+    BUSINESS_EMAIL = By.XPATH("//label[normalize-space()='Your business email']/../..//input")
+    COMPANY = By.XPATH("//label[normalize-space()='Your company']/../..//input")
+    TERRITORY = By.XPATH("//select[@id='QR~QID71']")
+    TERRITORY_TOPITCH = By.CSS_SELECTOR("table[role='presentation'] tr td label span")
+
+    CONTENT_DETAILS = By.XPATH("//span[contains(text(),'Content Details')]")
+    TYPEOFSONG = By.CSS_SELECTOR("div.QID18 table[role='presentation'] tr td label span")
+    ARTIST_NAME = By.XPATH("//label[normalize-space()='Artist name']/../..//input")
+    CONTENT_TITLE = By.XPATH("//label[normalize-space()='Content title']/../..//input")
+    APPLEID = By.XPATH("//label[contains(text(),'Apple ID')]/../..//input")
+    UPC_EAN = By.XPATH("//label[contains(text(),'UPC/EAN')]/../..//input")
+    RELEASE_DATE = By.XPATH("//label[contains(text(),'Release date')]/../..//input")
+    PROMOTION_DATE = By.XPATH("//label[contains(text(),'Promotion date')]/../..//input")
+
+    TIMED_RELEASE_QUESTIONS = By.CSS_SELECTOR("div.QID64 table[role='presentation'] tr td label span")
+    DELIVERED_DOLBYATMOS = By.CSS_SELECTOR("div.QID70 table[role='presentation'] tr td label span")
+    DELIVERED_MOTIONWORKS = By.CSS_SELECTOR("div.QID109 table[role='presentation'] tr td label span")
+    PLAYBOOK_PROMOTION = By.CSS_SELECTOR("div#QID103 table[role='presentation'] tr td label span")
+    LABEL_INPUT = By.XPATH("//label[contains(text(),'Label')]/../..//input")
+    DISTRIBUTOR = By.XPATH("//select[@id='QR~QID12']")
+    LISTENLINK = By.XPATH("//label[contains(text(),'Listen link')]/../..//input")
+    RELEASE_DETAILS = By.XPATH("//label[contains(text(),'Release details')]/../..//textarea")
+    PITCHING_FOR = By.XPATH("//label[contains(text(),'Pitching for')]/../..//textarea")
+    PRIMARY_GENRE = By.CSS_SELECTOR("div#QID10 table[role='presentation'] tr td label span")
+    ADDTIONAL_GENRE = By.CSS_SELECTOR("div#QID102 table[role='presentation'] tr td label span")
+    MOOD_QUESTIONS = By.CSS_SELECTOR("div#QID50 table[role='presentation'] tr td label span")

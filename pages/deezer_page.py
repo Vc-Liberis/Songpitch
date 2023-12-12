@@ -1,5 +1,5 @@
 from pages.base_page import BasePage
-from data.deezer import DeezerLocators
+from locators.deezer import DeezerLocators
 
 
 class DeezerPage(BasePage):

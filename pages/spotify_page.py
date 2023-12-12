@@ -1,6 +1,6 @@
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
-from data.spotify import SpotifyHomePageLocators
+from locators.spotify import SpotifyHomePageLocators
 
 
 class Spotify(BasePage):
@@ -22,7 +22,7 @@ class Spotify(BasePage):
         self.enter_text_by_locator(self.locator.password, password)
 
     def click_on_login(self):
-        self.click_button(*self.locator.loginBtn)
+        self.click_element(self.locator.loginBtn)
 
     def click_button(self, by, value):
         element = self.wait.until(EC.element_to_be_clickable((by, value)))
@@ -42,4 +42,4 @@ class Spotify(BasePage):
         self.enter_text_by_locator(self.locator.hometownForArtists, "London, England, United Kingdom")
 
     def wait_for_dashboard(self):
-        self.wait_for_presence_element(self.locator.ROASTER_ARTIST_TABLE)
+        self.wait_for_presence_element(self.locator.roasterArtistTable)

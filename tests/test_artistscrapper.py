@@ -1,8 +1,4 @@
 # coding=utf-8
-import gzip
-import json
-from io import BytesIO
-from time import sleep, time
 import pytest
 import requests
 from pages.spotify_page import Spotify
@@ -46,35 +42,83 @@ class TestArtistScrapper(BaseTest):
         self.page.wait_for_dashboard()
 
     def getBearerToken(self):
-        for request in self.driver.requests:
-            if request.url.lower() == 'https://roster-view-service.spotify.com/v1/settings':
-                access_token = request.headers.get('Authorization')
-                print(f"Bearer Token: {access_token}")
-                return access_token
+        print("get bearer token")
+        try:
+            for request in self.driver.requests:
+                if request.url.lower() == 'https://roster-view-service.spotify.com/v1/settings':
+                    access_token = request.headers.get('Authorization')
+                    if access_token is None:
+                        raise ValueError("Authorization header not found in the request.")
+                    print(f"Bearer Token: {access_token}")
+                    return access_token
+            raise RuntimeError("No request found for the specified URL.")
+        except Exception as e:
+            print(f"Error while getting Bearer Token: {str(e)}")
+            return None
 
     def getArtistDetails(self):
-        response = requests.get('https://api.spotify.com/v2/roster', headers=self.setup_roster_header())
-        return response
+        global response
+        try:
+            response = requests.get('https://api.spotify.com/v2/roster', headers=self.setup_roster_header())
+            response.raise_for_status()  # Raises HTTPError for bad responses
+            # If the response is successful (status code 2xx), return it
+            return response
+        except requests.HTTPError as http_ex:
+            # Handle HTTP errors (e.g., 4xx or 5xx status codes)
+            print(f"HTTP Error: {http_ex}")
+            print(f"Response content: {response.content}")
+        except requests.RequestException as req_ex:
+            # Handle general request exception (e.g., connection errors)
+            print(f"Request Exception: {req_ex}")
+        except Exception as ex:
+            # Handle other unexpected exceptions
+            print(f"Unexpected Exception: {ex}")
+        return None  # Return None to indicate an error
 
-    def fetch_data_from_json(self,data):
+    def fetch_data_from_json(self, data):
         artists = data.get('artists')
         for artist in artists:
-            artist_id = artist.get('id')
-            artist_name = artist.get('name')
-            image_url = artist.get('image_url')
-            upcoming_data = self.getUpcomingReleaseDetails(artist_id)
-            print(upcoming_data.json())
-            print(f"Artist ID: {artist_id}")
-            print(f"Artist Name: {artist_name}")
-            print(f"Image URL: {image_url}")
-            print(f"release details : {upcoming_data.json()['upcoming_releases']}")
-            print("-" * 30)
+            artist_id, artist_name, image_url = artist.get('id'), artist.get('name'), artist.get('image_url')
+            try:
+                upcoming_data = self.getUpcomingReleaseDetails(artist_id)
+                upcoming_releases = upcoming_data.json().get('upcoming_releases', [])
+                print(f"Artist ID: {artist_id}")
+                print(f"Artist Name: {artist_name}")
+                print(f"Image URL: {image_url}")
+                print(f"Release Details: {upcoming_releases}")
+                print("-" * 30)
+            except Exception as ex:
+                print(f"Error processing artist with ID {artist_id}: {ex}")
 
-    def getUpcomingReleaseDetails(self,artist_id):
-        response = requests.get(f'https://generic.wg.spotify.com/upcoming-view-service/v1/artist/{artist_id}/catalog', headers=self.setup_upcoming_release_header())
-        return response
+    def getUpcomingReleaseDetails(self, artist_id):
+        try:
+            response = requests.get(
+                f'https://generic.wg.spotify.com/upcoming-view-service/v1/artist/{artist_id}/catalog',
+                headers=self.setup_upcoming_release_header()
+            )
+            response.raise_for_status()  # Raises HTTPError for bad responses
+
+            # If the response is successful (status code 2xx), return it
+            return response
+        except requests.RequestException as req_ex:
+            # Handle general request exception (e.g., connection errors)
+            print(f"Request Exception: {req_ex}")
+        except requests.HTTPError as http_ex:
+            # Handle HTTP errors (e.g., 4xx or 5xx status codes)
+            print(f"HTTP Error: {http_ex}")
+            print(f"Response content: {response.content}")
+        except Exception as ex:
+            # Handle other unexpected exceptions
+            print(f"Unexpected Exception: {ex}")
+        return None  # Return None to indicate an error
 
     def test_spotifyscrapper(self, setup_spotifyscrapper):
-        artist = self.getArtistDetails()
+        global artist
+        try:
+            artist = self.getArtistDetails()
+            if artist is None:
+                print("Unable to get artist details")
+        except:
+            print("")
         self.fetch_data_from_json(artist.json())
         pass
