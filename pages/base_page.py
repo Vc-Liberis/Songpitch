@@ -1,11 +1,24 @@
 import pandas as pd
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
+import platform
 
 
 class BasePage:
-    excel_file_path = ".\\testData\\SignUpTestData.xlsx"
-    df = pd.read_excel(excel_file_path, sheet_name="Sheet1")
+    if platform.system() == 'Windows':
+        os.chdir("..")
+    current_directory = os.getcwd()
+    print("current dir ",current_directory)
+    # Construct the file path using os.path.join
+    file_path = os.path.join(current_directory, 'testData', 'SignUpTestData.xlsx')
+
+    # Check if the file exists before trying to open it
+    if os.path.exists(file_path):
+        pass
+    else:
+        print(f"File not found: {file_path}")
+    df = pd.read_excel(file_path, sheet_name="Sheet1")
 
     def __init__(self, driver, wait):
         self.driver = driver
@@ -19,7 +32,7 @@ class BasePage:
 
     def click_element(self, element, timeout=10):
         try:
-            clickable_element = WebDriverWait(element._parent, timeout).until(
+            clickable_element = self.wait.until(
                 EC.element_to_be_clickable(element)
             )
             clickable_element.click()
@@ -29,7 +42,7 @@ class BasePage:
 
     def click_element_by_value(self, driver, by, value, timeout=10):
         try:
-            element = WebDriverWait(driver, timeout).until(
+            element = self.wait.until(
                 EC.element_to_be_clickable((by, value))
             )
             element.click()
@@ -39,7 +52,7 @@ class BasePage:
 
     def input_text_by_by(self, driver, by, value, text, timeout=10):
         try:
-            textbox = WebDriverWait(driver, timeout).until(
+            textbox = self.wait.until(
                 EC.presence_of_element_located((by, value))
             )
             textbox.clear()

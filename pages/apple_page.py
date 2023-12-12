@@ -1,5 +1,5 @@
 from pages.base_page import BasePage
-from data.apple import AppleLocators
+from locators.apple import AppleLocators
 
 
 class ApplePage(BasePage):

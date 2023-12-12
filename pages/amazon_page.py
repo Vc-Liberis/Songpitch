@@ -1,7 +1,7 @@
 from selenium.webdriver.support import expected_conditions as EC
 
 from pages.base_page import BasePage
-from data.amazon import AmazonLocators
+from locators.amazon import AmazonLocators
 
 
 class AmazonPage(BasePage):

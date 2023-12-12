@@ -1,26 +1,51 @@
-# Use an official Python runtime as a parent image
-FROM python:3.8-slim
+FROM public.ecr.aws/lambda/python:3.11
 
-# Set the working directory in the container
-WORKDIR /appscrapper
+# Copy requirements.txt
+COPY .. ${LAMBDA_TASK_ROOT}
 
-# Copy the current directory contents into the container at /usr/src/app
-COPY . .
+# Install the specified packages
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt --index-url=https://pypi.org/simple/
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Chrome and ChromeDriver
-RUN apt update && \
-    apt install -y wget gnupg && \
-    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
-    apt update && \
-    apt install -y google-chrome-stable && \
-    apt install -y unzip && \
-    wget -O chromedriver.zip https://chromedriver.storage.googleapis.com/$(wget -qO - https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip && \
-    unzip chromedriver.zip -d /usr/local/bin && \
-    rm chromedriver.zip
+RUN yum -y install \
+    wget \
+    GConf2 \
+    libX11 \
+    libX11-xcb \
+    libXcomposite \
+    libXcursor \
+    libXdamage \
+    libXext \
+    libXi \
+    libXtst \
+    libXrandr \
+    libXScrnSaver \
+    libXss \
+    libXxf86vm \
+    redhat-lsb \
+    atk \
+    gtk3 \
+    ipa-gothic-fonts \
+    xorg-x11-fonts-100dpi \
+    xorg-x11-fonts-75dpi \
+    xorg-x11-utils \
+    xorg-x11-fonts-cyrillic \
+    xorg-x11-fonts-Type1 \
+    xorg-x11-fonts-misc \
+    && yum clean all
 
-# Run pytest when the container launches
-CMD ["pytest"]
+# Install Google Chrome
+#RUN wget https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-114.0.5735.90-1.x86_64.rpm && \
+    #yum -y localinstall google-chrome-stable-114.0.5735.90-1.x86_64.rpm && \
+    #rm google-chrome-stable-114.0.5735.90-1.x86_64.rpm
+
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    yum -y localinstall google-chrome-stable_current_x86_64.rpm && \
+    rm google-chrome-stable_current_x86_64.rpm
+
+# Set the Chrome binary path as an environment variable
+ENV CHROME_BIN=/usr/bin/google-chrome
+
+# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+CMD [ "lambda.lambda_handler" ]
