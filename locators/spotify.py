@@ -8,6 +8,7 @@ class SpotifyHomePageLocators:
     searchByArtist = (By.CSS_SELECTOR, "[placeholder=\"Search roster\"]")
     roasterArtistSpan = (By.XPATH, "//table/tbody/tr//td//button//following::span[1]")
     roasterArtistTable = (By.XPATH, "//table/tbody/tr//td//button/span")
+    spotifyLoaderSVG = (By.XPATH, "//*[local-name()='svg' and @role='progressbar']")
     roasterArtistTableHeader = (By.XPATH, "//table//tr/th[contains(text(), 'Change')]")
     roasterArtistStreamBtn = (By.XPATH, "//div[contains(text(), 'Streams')]//parent::button")
     roasterArtistBtn = (By.CSS_SELECTOR, "button[locators-encore-id='popoverNavigationLink']")
