@@ -1,4 +1,6 @@
 # coding=utf-8
+import logging
+
 import pytest
 import requests
 from pages.spotify_page import Spotify
@@ -42,6 +44,7 @@ class TestArtistScrapper(BaseTest):
         self.page.wait_for_dashboard()
 
     def getBearerToken(self):
+        logging.basicConfig(level=logging.INFO)
         print("get bearer token")
         try:
             for request in self.driver.requests:

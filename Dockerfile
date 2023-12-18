@@ -1,51 +1,53 @@
-FROM public.ecr.aws/lambda/python:3.11
+# Use an official Python runtime as a parent image
+FROM python:3.8
 
-# Copy requirements.txt
-COPY .. ${LAMBDA_TASK_ROOT}
+# Set the working directory
+WORKDIR /app
 
-# Install the specified packages
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt --index-url=https://pypi.org/simple/
+## Copy the current directory contents into the container at /app
+COPY requirements.txt .
 
+# Copy the project files to the container
+COPY . /app
 
-RUN yum -y install \
-    wget \
-    GConf2 \
-    libX11 \
-    libX11-xcb \
-    libXcomposite \
-    libXcursor \
-    libXdamage \
-    libXext \
-    libXi \
-    libXtst \
-    libXrandr \
-    libXScrnSaver \
-    libXss \
-    libXxf86vm \
-    redhat-lsb \
-    atk \
-    gtk3 \
-    ipa-gothic-fonts \
-    xorg-x11-fonts-100dpi \
-    xorg-x11-fonts-75dpi \
-    xorg-x11-utils \
-    xorg-x11-fonts-cyrillic \
-    xorg-x11-fonts-Type1 \
-    xorg-x11-fonts-misc \
-    && yum clean all
+# Install any needed packages specified in requirements.txt
+RUN pip install -r requirements.txt
 
-# Install Google Chrome
-#RUN wget https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-114.0.5735.90-1.x86_64.rpm && \
-    #yum -y localinstall google-chrome-stable-114.0.5735.90-1.x86_64.rpm && \
-    #rm google-chrome-stable-114.0.5735.90-1.x86_64.rpm
+# Install additional packages using apt-get
+RUN apt-get update && \
+    apt-get install -y \
+        wget \
+        libgconf-2-4 \
+        libx11-6 \
+        libx11-xcb1 \
+        libxcomposite1 \
+        libxcursor1 \
+        libxdamage1 \
+        libxext6 \
+        libxi6 \
+        libxtst6 \
+        libxrandr2 \
+        libxss1 \
+        libxxf86vm1 \
+        lsb-release \
+        libatk-bridge2.0-0 \
+        libgtk-3-0 \
+        fonts-ipaexfont \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-    yum -y localinstall google-chrome-stable_current_x86_64.rpm && \
-    rm google-chrome-stable_current_x86_64.rpm
+# Install dependencies and download Google Chrome
+RUN apt-get update && \
+    apt-get install -y wget fonts-liberation libasound2 libdrm2 libgbm1 libnspr4 libnss3 libu2f-udev libvulkan1 xdg-utils && \
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    dpkg -i google-chrome-stable_current_amd64.deb && \
+    rm google-chrome-stable_current_amd64.deb && \
+    apt-get -y install -f
 
 # Set the Chrome binary path as an environment variable
 ENV CHROME_BIN=/usr/bin/google-chrome
 
-# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
-CMD [ "lambda.lambda_handler" ]
+# Set PYTHONUNBUFFERED environment variable
+ENV PYTHONUNBUFFERED=1
+
+# CMD to run tests when the container launches
+CMD ["pytest", "tests/test_artistscrapper.py"]

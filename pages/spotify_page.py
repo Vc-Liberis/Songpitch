@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from locators.spotify import SpotifyHomePageLocators
@@ -42,4 +44,6 @@ class Spotify(BasePage):
         self.enter_text_by_locator(self.locator.hometownForArtists, "London, England, United Kingdom")
 
     def wait_for_dashboard(self):
-        self.wait_for_presence_element(self.locator.roasterArtistTable)
+        time.sleep(20)
+        # self.wait_for_presence_element(self.locator.roasterArtistTable)
+        self.wait_for_element_clickable("//div[contains(text(), 'Streams')]//parent::button")

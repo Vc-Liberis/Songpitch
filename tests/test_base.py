@@ -3,9 +3,8 @@ from pathlib import Path
 
 import yaml
 from selenium import webdriver
-from selenium.webdriver.chrome import service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.service import Service
 import warnings
 import pytest
@@ -15,7 +14,6 @@ from seleniumwire import webdriver
 
 os.environ['WDM_LOG_LEVEL'] = '1'
 os.environ["WDM_LOCAL"] = "1"
-
 
 def config():
     path = Path(__file__).parent / "../locators/config.yaml"
@@ -38,7 +36,7 @@ class BaseTest:
                 version = version_line.split()[2]
             elif platform.system() == 'Darwin':
                 # For macOS
-                result = subprocess.run(['/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome', '--version'],
+                result = subprocess.run([r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome', '--version'],
                                         capture_output=True, text=True, shell=True)
                 version = result.stdout.strip().split()[-1]
             elif platform.system() == 'Linux':
@@ -87,10 +85,16 @@ class BaseTest:
             print(f"Google Chrome Binary Directory: {chrome_directory}")
         print(os.path.join(os.getcwd(), 'driver', 'chromedriver'))
         warnings.simplefilter("ignore", ResourceWarning)
-        # Set a valid timeout for the "connect" attribut
 
         if config()['browser'] == 'chrome':
-            self.driver = webdriver.Chrome()  # Set implicit wait time
+            chrome_options = Options()
+            if config()['headless']:
+                chrome_options.add_argument('--headless')
+                chrome_options.add_argument('--no-sandbox')
+                chrome_options.add_argument('--disable-gpu')
+                chrome_options.add_argument('--window-size=1920,1080')
+            self.driver = webdriver.Chrome(options=chrome_options)
+
         elif config()['browser'] == 'firefox':
             options = webdriver.FirefoxOptions()
             if config()['headless']:
@@ -99,20 +103,16 @@ class BaseTest:
                 options.add_argument('--disable-gpu')
                 options.add_argument('--window-size=1920,1080')
             self.driver = webdriver.Firefox(options=options)
+
         elif config()['browser'] == 'headless':
-            chromedriver_path = os.path.join(os.getcwd(), 'driver', 'chromedriver')
-            service = Service(executable_path=chromedriver_path)
-            options = webdriver.ChromeOptions()
+            chrome_options = Options()
             if config()['headless']:
-                options.add_argument('--headless')
-                options.add_argument('--no-sandbox')
-                options.add_argument('--disable-gpu')
-                options.add_argument('--window-size=1920,1080')
-                options.binary_location = '/usr/bin/google-chrome'
-            self.driver = webdriver.Chrome(
-                service=service,
-                options=options
-              )
+                chrome_options.add_argument('--headless')
+                chrome_options.add_argument('--no-sandbox')
+                chrome_options.add_argument('--disable-gpu')
+                chrome_options.add_argument('--window-size=1920,1080')
+            self.driver = webdriver.Chrome(options=chrome_options)
+
         else:
             raise Exception("Incorrect Browser")
 

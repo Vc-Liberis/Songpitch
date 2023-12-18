@@ -1,4 +1,5 @@
 import pandas as pd
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
@@ -36,7 +37,7 @@ class BasePage:
                 EC.element_to_be_clickable(element)
             )
             clickable_element.click()
-            print("Clicked on the element successfully.")
+            print(f"Clicked on the element successfully.")
         except Exception as e:
             print(f"Failed to click on the element. {str(e)}")
 
@@ -92,6 +93,40 @@ class BasePage:
             return element
         except Exception as e:
             raise TimeoutError(f"Element {locator} not found within {timeout} seconds.") from e
+
+    def wait_for_element_visible(self, element_xpath, timeout=15):
+        """
+        Wait for an element to be visible using JavaScript Executor.
+        """
+        try:
+            element = WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located((By.XPATH, element_xpath))
+            )
+            WebDriverWait(self.driver, timeout).until(
+                lambda driver: driver.execute_script("return arguments[0].offsetParent !== null;", element)
+            )
+            return element
+        except Exception as e:
+            raise TimeoutError(f"Element not visible within {timeout} seconds: {e}")
+
+    def wait_for_element_clickable(self, element_xpath, timeout=10):
+        """
+        Wait for an element to be clickable using JavaScript Executor.
+        """
+        try:
+            element = WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located((By.XPATH, element_xpath))
+            )
+
+            WebDriverWait(self.driver, timeout).until(
+                lambda driver: self.driver.execute_script(
+                    "return arguments[0].offsetParent !== null && arguments[0].disabled === false;", element
+                )
+            )
+
+            return element
+        except Exception as e:
+            raise TimeoutError(f"Element not clickable within {timeout} seconds: {e}")
 
     def wait_for_visiblity_element(self, locator, timeout=30):
         try:
