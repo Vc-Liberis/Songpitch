@@ -91,6 +91,8 @@ class BasePage:
                 EC.invisibility_of_element_located(locator)
             )
         except Exception as e:
+            self.driver.save_screenshot(
+                'C:\\Users\\SurajDengale\\IdeaProjects\\vinayLatest\\Songpitch\\Screenshots\\wait_for_element_to_disappear.png')
             raise TimeoutError(f"Element {locator} did not disappear within {timeout} seconds.") from e
 
     def wait_for_presence_element(self, locator, timeout=30):
@@ -144,6 +146,8 @@ class BasePage:
             )
             return element
         except Exception as e:
+            self.driver.save_screenshot(
+                'C:\\Users\\SurajDengale\\IdeaProjects\\vinayLatest\\Songpitch\\Screenshots\\wait_for_visiblity_element.png')
             raise TimeoutError(f"Element {locator} not found within {timeout} seconds.") from e
 
     def wait_for_element(self, locator, timeout=30):

@@ -46,4 +46,6 @@ class Spotify(BasePage):
     def wait_for_dashboard(self):
         time.sleep(20)
         self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
-        self.wait_for_visiblity_element(self.locator.roasterArtistTable)
+        time.sleep(5)
+        self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
+        self.wait_for_presence_element(self.locator.roasterArtistTable)
