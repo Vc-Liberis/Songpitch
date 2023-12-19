@@ -44,8 +44,14 @@ class Spotify(BasePage):
         self.enter_text_by_locator(self.locator.hometownForArtists, "London, England, United Kingdom")
 
     def wait_for_dashboard(self):
-        time.sleep(150)
-        # self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
-        # time.sleep(5)
+        # Implicit wait (applies to all elements)
+        # self.driver.implicitly_wait(150)
+        self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
+        time.sleep(20)
+        self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
+        time.sleep(2)
+        self.wait_for_visiblity_element(self.locator.firstArtistStarImg)
+        time.sleep(2)
+        self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
         # self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
         # self.wait_for_presence_element(self.locator.roasterArtistTable)
