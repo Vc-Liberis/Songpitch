@@ -1,4 +1,6 @@
 # coding=utf-8
+import logging
+
 import pytest
 import requests
 from pages.spotify_page import Spotify
@@ -35,17 +37,19 @@ class TestArtistScrapper(BaseTest):
     def setup_spotifyscrapper(self):
         self.page = Spotify(self.driver, self.wait)
         self.page.go_to_home_page()
-        # self.page.check_title("Login - Spotify")
         self.page.enter_username("pitching@weareinstrumental.com")
-        self.page.enter_password("Shifting#Supremacy#Symphony5")
+        self.page.enter_password("Shifting#Supremacy#Symphony6")
         self.page.click_on_login()
         self.page.wait_for_dashboard()
 
     def getBearerToken(self):
-        print("get bearer token")
+        # Configure the logger
+        logging.basicConfig(filename=r'logs/test.log', level=logging.INFO)
+        print("get bearer token", flush=True)
         try:
             for request in self.driver.requests:
                 if request.url.lower() == 'https://roster-view-service.spotify.com/v1/settings':
+                    print("URL found::: https://roster-view-service.spotify.com/v1/settings")
                     access_token = request.headers.get('Authorization')
                     if access_token is None:
                         raise ValueError("Authorization header not found in the request.")

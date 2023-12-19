@@ -2,12 +2,12 @@
 import pytest
 from pages.spotify_page import Spotify
 from tests.test_base import BaseTest
-from api import HeaderSetup
-from api.SpotifyApi import SpotifyApi
+# from api import HeaderSetup
+# from api.SpotifyApi import SpotifyApi
 
 
 class TestArtistScrapper(BaseTest):
-    header_setup = HeaderSetup
+    # header_setup = HeaderSetup
 
 
     @pytest.fixture
@@ -19,7 +19,7 @@ class TestArtistScrapper(BaseTest):
         self.page.click_on_login()
         self.page.wait_for_dashboard()
 
-    def test_apple_scrapper(self, setup_spotifyscrapper):
-        spotify_api_instance = SpotifyApi(self.driver, self.wait, self.header_setup)
-        artist = spotify_api_instance.get_artist_details()
-        spotify_api_instance.fetch_data_from_json(artist.json())
+    # def test_apple_scrapper(self, setup_spotifyscrapper):
+    #     spotify_api_instance = SpotifyApi(self.driver, self.wait, self.header_setup)
+    #     artist = spotify_api_instance.get_artist_details()
+    #     spotify_api_instance.fetch_data_from_json(artist.json())
