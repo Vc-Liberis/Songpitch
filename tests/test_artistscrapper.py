@@ -41,32 +41,11 @@ class TestArtistScrapper(BaseTest):
         self.page.enter_password("Shifting#Supremacy#Symphony6")
         self.page.click_on_login()
         self.page.wait_for_dashboard()
-        # self.setup_roster_header()
-
-    def save_bearer_token_for_spotify(self):
-        # Extract network data using JavaScriptExecutor
-        js_executor = self.driver.execute_script
-
-        # Execute JavaScript code to retrieve performance logs
-        logs = js_executor("return window.performance.getEntries()")
-
-        # Convert logs to string (you can use a JSON library for more structured handling)
-        logs_string = str(logs)
-
-        # Print the raw network logs
-        print("Network Logs: " + logs_string)
-
-        # Parse the logs and extract headers for a specific network request (customize this based on your needs)
-        # In this example, we are printing headers for the first network request
-        headers = js_executor(
-            "return JSON.parse(arguments[0])[0].response.headers",
-            logs_string
-        )
-        print(logs_string)
 
     def getBearerToken(self):
-        logging.basicConfig(level=logging.INFO)
-        print("get bearer token")
+        # Configure the logger
+        logging.basicConfig(filename=r'logs/test.log', level=logging.INFO)
+        print("get bearer token", flush=True)
         try:
             for request in self.driver.requests:
                 if request.url.lower() == 'https://roster-view-service.spotify.com/v1/settings':

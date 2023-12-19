@@ -50,4 +50,4 @@ ENV CHROME_BIN=/usr/bin/google-chrome
 ENV PYTHONUNBUFFERED=1
 
 # CMD to run tests when the container launches
-CMD ["pytest", "tests/test_artistscrapper.py"]
+CMD ["pytest", "-s", "-v", "tests/test_artistscrapper.py"]
