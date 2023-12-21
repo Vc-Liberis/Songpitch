@@ -1,8 +1,13 @@
+import os
 import time
+import random
 
 from selenium.webdriver.support import expected_conditions as EC
+
 from pages.base_page import BasePage
 from locators.spotify import SpotifyHomePageLocators
+
+random_delay = random.uniform(4, 8)
 
 
 class Spotify(BasePage):
@@ -13,18 +18,22 @@ class Spotify(BasePage):
 
     def go_to_home_page(self):
         self.go_to_page(self.url)
+        time.sleep(random_delay)
 
     def check_title(self, title):
         self.wait.until(EC.title_contains(title))
-        
+
     def enter_username(self, username):
         self.enter_text_by_locator(self.locator.emailUsername, username)
+        time.sleep(random_delay)
 
     def enter_password(self, password):
         self.enter_text_by_locator(self.locator.password, password)
+        time.sleep(random_delay)
 
     def click_on_login(self):
         self.click_element(self.locator.loginBtn)
+        time.sleep(random_delay)
 
     def click_button(self, by, value):
         element = self.wait.until(EC.element_to_be_clickable((by, value)))
@@ -43,15 +52,17 @@ class Spotify(BasePage):
         self.click_button(*self.locator.hometownForArtists)
         self.enter_text_by_locator(self.locator.hometownForArtists, "London, England, United Kingdom")
 
+    def is_captcha_present(self):
+        page_content = self.driver.page_source
+        if "captcha" in page_content.lower():
+            print("CAPTCHA detected on the page.")
+            self.driver.save_screenshot(
+                os.path.join(os.getcwd(), "Screenshots\\captcha_Detected.png"))
+
     def wait_for_dashboard(self):
-        # Implicit wait (applies to all elements)
-        # self.driver.implicitly_wait(150)
-        self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
-        time.sleep(20)
-        self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
-        time.sleep(2)
-        self.wait_for_visiblity_element(self.locator.firstArtistStarImg)
-        time.sleep(2)
-        self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
+        time.sleep(62)
+        self.is_captcha_present()
+        time.sleep(random_delay)
         # self.wait_for_element_to_disappear(self.locator.spotifyLoaderSVG)
-        # self.wait_for_presence_element(self.locator.roasterArtistTable)
+        # self.wait_for_visiblity_element(self.locator.firstArtistStarImg)
+        # self.click_element(self.locator.searchByArtist)

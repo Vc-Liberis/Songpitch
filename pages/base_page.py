@@ -92,7 +92,7 @@ class BasePage:
             )
         except Exception as e:
             self.driver.save_screenshot(
-                'C:\\Users\\SurajDengale\\IdeaProjects\\vinayLatest\\Songpitch\\Screenshots\\wait_for_element_to_disappear.png')
+                os.path.join(os.getcwd(), "Screenshots\\wait_for_element_to_disappear.png"))
             raise TimeoutError(f"Element {locator} did not disappear within {timeout} seconds.") from e
 
     def wait_for_presence_element(self, locator, timeout=30):
@@ -117,7 +117,8 @@ class BasePage:
             )
             return element
         except Exception as e:
-            self.driver.save_screenshot('C:\\Users\\SurajDengale\\IdeaProjects\\vinayLatest\\Songpitch\\Screenshots\\error.png')
+            self.driver.save_screenshot(
+                os.path.join(os.getcwd(), "Screenshots\\wait_for_element_visible.png"))
             raise TimeoutError(f"Element not visible within {timeout} seconds: {e}")
 
     def wait_for_element_clickable(self, element_xpath, timeout=20):
@@ -147,7 +148,7 @@ class BasePage:
             return element
         except Exception as e:
             self.driver.save_screenshot(
-                'C:\\Users\\SurajDengale\\IdeaProjects\\vinayLatest\\Songpitch\\Screenshots\\wait_for_visiblity_element.png')
+                os.path.join(os.getcwd(), "Screenshots\\wait_for_visiblity_element.png"))
             raise TimeoutError(f"Element {locator} not found within {timeout} seconds.") from e
 
     def wait_for_element(self, locator, timeout=30):

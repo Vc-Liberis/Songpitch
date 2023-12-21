@@ -1,5 +1,5 @@
 #chrome/firefox/edge
-browser: headless
+browser: firefox
 
 #True/False
 headless: True

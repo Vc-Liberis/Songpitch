@@ -5,7 +5,6 @@ import yaml
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.chrome.service import Service
 import warnings
 import pytest
 import subprocess
@@ -89,7 +88,6 @@ class BaseTest:
         if config()['browser'] == 'chrome':
             chrome_options = Options()
             if config()['headless']:
-                chrome_options.add_argument('--headless')
                 chrome_options.add_argument('--no-sandbox')
                 chrome_options.add_argument("--disable-gpu")
                 chrome_options.add_argument("--disable-software-rasterizer")
@@ -103,6 +101,14 @@ class BaseTest:
                 options.add_argument('--no-sandbox')
                 options.add_argument('--disable-gpu')
                 options.add_argument('--window-size=1920,1080')
+
+                # Additional options to mimic human-like behavior and potentially avoid CAPTCHAs
+                options.set_preference("general.useragent.override","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                options.set_preference("privacy.resistFingerprinting", True)
+                options.set_preference("privacy.trackingprotection.fingerprinting.enabled", True)
+                options.set_preference("privacy.trackingprotection.cryptomining.enabled", True)
+                options.set_preference("privacy.trackingprotection.enabled", True)
+                options.set_preference("privacy.trackingprotection.socialtracking.enabled", True)
             self.driver = webdriver.Firefox(options=options)
 
         elif config()['browser'] == 'headless':
@@ -110,11 +116,13 @@ class BaseTest:
             if config()['headless']:
                 chrome_options.add_argument('--headless')
                 chrome_options.add_argument('--no-sandbox')
-                chrome_options.add_argument('--log-level=INFO')
-                chrome_options.add_argument(r'--log-path=C:\Users\SurajDengale\IdeaProjects\vinayLatest\Songpitch\logs\test.log')
-                chrome_options.add_argument('--disable-gpu')
-                chrome_options.add_argument('--incognito')
-                chrome_options.add_argument('--window-size=1920,1080')
+                chrome_options.add_argument("--disable-gpu")
+                chrome_options.add_argument("--disable-extensions")
+                chrome_options.add_argument('--disable-dev-shm-usage')
+                chrome_options.add_argument('--disable-browser-side-navigation')
+                chrome_options.add_argument("--disable-software-rasterizer")
+                chrome_options.add_argument('--accept_insecure_certs=true')
+                chrome_options.add_argument('--window-size=1920x1080')
             self.driver = webdriver.Chrome(options=chrome_options)
 
         else:
